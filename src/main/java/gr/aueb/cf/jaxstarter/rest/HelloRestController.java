@@ -1,5 +1,7 @@
 package gr.aueb.cf.jaxstarter.rest;
 
+import gr.aueb.cf.jaxstarter.model.Teacher;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -23,4 +25,12 @@ public class HelloRestController {
 //        return Response.ok("Hello Coding Factory").build();
         return Response.status(Response.Status.OK).entity("Hello Coding Factory").build();
     }
+
+    @GET
+    @Path("/get-teacher")
+    @Produces(MediaType.APPLICATION_JSON)
+    public  Response getTeacher(){
+        return Response.status(Response.Status.OK).entity(new Teacher(1L,"123456", "Nick", "Pappas")).build();
+    }
+
 }
