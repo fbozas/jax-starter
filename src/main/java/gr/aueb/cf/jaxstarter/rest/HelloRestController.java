@@ -44,4 +44,13 @@ public class HelloRestController {
         return Response.status(Response.Status.CREATED).location(uri).entity(message).build();
     }
 
+    @GET
+    @Path("/messages/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public  Response getMessage(@PathParam("id") String id){
+        // Get from DB the message with id == 1 :P
+        String message = "Hello World!";
+        return Response.status(Response.Status.OK).entity(message).build();
+    }
+
 }
