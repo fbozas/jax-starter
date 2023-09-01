@@ -5,6 +5,7 @@ import gr.aueb.cf.jaxstarter.model.Teacher;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
+import java.util.List;
 
 @Path("/hello")
 public class HelloRestController {
@@ -51,6 +52,19 @@ public class HelloRestController {
         // Get from DB the message with id == 1 :P
         String message = "Hello World!";
         return Response.status(Response.Status.OK).entity(message).build();
+    }
+
+    @GET
+    @Path("/orders")
+    @Produces(MediaType.TEXT_PLAIN)
+    public  Response getOrders(@QueryParam("from") int from,
+                               @QueryParam("to") int to,
+                               @QueryParam("orderBy") List<String> orderBy){
+
+        return Response
+                .status(Response.Status.OK)
+                .entity("From: " + from + ", To: " + to + ", order by" + orderBy.toString())
+                .build();
     }
 
 }
