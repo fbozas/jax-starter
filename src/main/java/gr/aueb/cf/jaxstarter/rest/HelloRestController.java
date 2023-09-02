@@ -1,5 +1,6 @@
 package gr.aueb.cf.jaxstarter.rest;
 
+import gr.aueb.cf.jaxstarter.dto.TeacherInsertDTO;
 import gr.aueb.cf.jaxstarter.dto.UserDTO;
 import gr.aueb.cf.jaxstarter.model.Teacher;
 
@@ -107,6 +108,28 @@ public class HelloRestController {
         userDTO.setUsername(params.getFirst("username"));
         userDTO.setPassword(params.getFirst("password"));
         return userDTO;
+    }
+
+
+    @POST
+    @Path("/teachers")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addTeacher(TeacherInsertDTO dto, @Context UriInfo uriInfo){
+
+        Set<ConstraintViolation<TeacherInsertDTO>> violations = validator.validate(dto);
+
+        if(!violations.isEmpty()){
+            List<String> errors = new ArrayList<>();
+            for(ConstraintViolation<TeacherInsertDTO> violation : violations){
+                errors.add(violation.getMessage());
+            }
+            return Response.status(Response.Status.BAD_REQUEST).entity(errors).build();
+        }
+        // teacher inserted with id == 1
+        UriBuilder uriBuilder = uriInfo.getBaseUriBuilder();
+        URI uri = uriBuilder.path("1").build();
+        return Response.status(Response.Status.CREATED).location(uri).build();
     }
 
 }
