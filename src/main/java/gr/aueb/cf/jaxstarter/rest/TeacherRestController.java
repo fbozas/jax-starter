@@ -2,6 +2,7 @@ package gr.aueb.cf.jaxstarter.rest;
 
 import gr.aueb.cf.jaxstarter.dto.TeacherInsertDTO;
 import gr.aueb.cf.jaxstarter.dto.TeacherReadOnlyDTO;
+import gr.aueb.cf.jaxstarter.dto.TeacherUpdateDTO;
 import gr.aueb.cf.jaxstarter.model.Teacher;
 
 import javax.validation.ConstraintViolation;
@@ -11,10 +12,7 @@ import javax.validation.ValidatorFactory;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Path("/teachers")
 public class TeacherRestController {
@@ -88,6 +86,22 @@ public class TeacherRestController {
         UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder();
         URI uri = uriBuilder.path(dto.getId().toString()).build();
         return Response.status(Response.Status.OK).location(uri).entity(dto).build();
+    }
+
+    @DELETE
+    @Path("{teacherId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteTeacher(@PathParam("teacherId") Long teacherId){
+
+        // We call deleteTeacher(teacherId) and
+        // we get back the deleted teacher
+        Teacher teacher = new Teacher(1L, "123456", "Nick", "Pappas");
+        if(teacher == null)
+            return Response.status(Response.Status.NOT_FOUND).build();
+
+
+        TeacherReadOnlyDTO dto = mapFrom(teacher);
+        return Response.status(Response.Status.OK).entity(dto).build();
     }
 
     private TeacherInsertDTO mapFromMulti(MultivaluedMap<String, String> params){
