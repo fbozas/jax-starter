@@ -104,8 +104,44 @@ public class TeacherRestController {
         return Response.status(Response.Status.OK).entity(dto).build();
     }
 
+    @PUT
+    @Path("{teacherId}")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateTeacher(@PathParam("teacherId") Long teacherId, MultivaluedMap<String, String> params){
+        if(!Objects.equals(teacherId, Long.parseLong(params.getFirst("id"))))
+            return Response.status(Response.Status.BAD_REQUEST).build();
+
+        List<String> errors = new ArrayList<>();
+        TeacherUpdateDTO teacherUpdateDTO = mapUpdateFromMulti(params);
+
+        Set<ConstraintViolation<TeacherUpdateDTO>> violations = validator.validate(teacherUpdateDTO);
+        if(!violations.isEmpty()){
+            for(ConstraintViolation<TeacherUpdateDTO> violation : violations){
+                errors.add(violation.getMessage());
+            }
+            return Response.status(Response.Status.BAD_REQUEST).entity(errors).build();
+        }
+
+        // call update service
+        Teacher teacher = new Teacher(teacherId, teacherUpdateDTO.getSsn(),
+                teacherUpdateDTO.getFirstname(), teacherUpdateDTO.getLastname());
+
+        TeacherReadOnlyDTO dto = mapFrom(teacher);
+        return Response.status(Response.Status.OK).entity(dto).build();
+    }
+
     private TeacherInsertDTO mapFromMulti(MultivaluedMap<String, String> params){
         TeacherInsertDTO dto = new TeacherInsertDTO();
+        dto.setSsn(params.getFirst("ssn"));
+        dto.setFirstname(params.getFirst("firstname"));
+        dto.setLastname(params.getFirst("lastname"));
+        return dto;
+    }
+
+    private TeacherUpdateDTO mapUpdateFromMulti(MultivaluedMap<String, String> params){
+        TeacherUpdateDTO dto = new TeacherUpdateDTO();
+        dto.setId(Long.parseLong(params.getFirst("id")));
         dto.setSsn(params.getFirst("ssn"));
         dto.setFirstname(params.getFirst("firstname"));
         dto.setLastname(params.getFirst("lastname"));

@@ -1,10 +1,13 @@
 package gr.aueb.cf.jaxstarter.dto;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.validation.constraints.NotNull;
 
-public class TeacherInsertDTO {
+public class TeacherUpdateDTO {
+
+    @NotNull(message = "Please fill the id")
+    private Long id;
 
     @Size(min = 6, max = 6, message = "Ssn must be 6-digit long")
     private String ssn;
@@ -14,6 +17,14 @@ public class TeacherInsertDTO {
 
     @NotBlank(message = "Please fill the lastname")
     private String lastname;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getSsn() {
         return ssn;
