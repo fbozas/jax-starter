@@ -6,7 +6,7 @@ import javax.validation.constraints.Size;
 
 public class TeacherInsertDTO {
 
-    @NotNull(message = "Please fill the id")
+//    @NotNull(message = "Please fill the id")
     private Long id;
 
     @Size(min = 6, max = 6, message = "Ssn must be 6-digit long")
@@ -14,6 +14,8 @@ public class TeacherInsertDTO {
 
     @NotBlank(message = "Please fill the firstname")
     private String firstname;
+
+    @NotBlank(message = "Please fill the lastname")
     private String lastname;
 
     public Long getId() {
