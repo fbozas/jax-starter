@@ -8,6 +8,7 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -45,6 +46,22 @@ public class TeacherRestController {
             teachersDto.add(mapFrom(teacher));
         }
         return Response.status(Response.Status.OK).entity(teachersDto).build();
+    }
+
+    @GET
+    @Path("/{teacherId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getTeacher(@PathParam("teacherId") Long teacherId){
+
+        // Assume we call service getTeachersById and
+        // we get back a teacher instance or null
+        Teacher teacher = new Teacher(1L, "123456", "Nick", "Pappas");
+
+        if(teacher == null)
+            return Response.status(Response.Status.NOT_FOUND).entity("NOT FOUND").build();
+
+        TeacherReadOnlyDTO dto = mapFrom(teacher);
+        return Response.status(Response.Status.OK).entity(dto).build();
     }
 
     private TeacherReadOnlyDTO mapFrom(Teacher teacher){
